@@ -1,5 +1,6 @@
 package lk.ijse.eca.userservice.service.impl;
 
+import lk.ijse.eca.userservice.dto.AuthResponseDTO;
 import lk.ijse.eca.userservice.dto.UserRequestDTO;
 import lk.ijse.eca.userservice.dto.UserResponseDTO;
 import lk.ijse.eca.userservice.entity.User;
@@ -13,8 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -47,7 +46,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public String login(UserRequestDTO dto) {
+    public AuthResponseDTO login(UserRequestDTO dto) {
         log.debug("Attempting login for username: {}", dto.getUsername());
 
         User user = userRepository.findByUsername(dto.getUsername())
@@ -62,7 +61,7 @@ public class UserServiceImpl implements UserService {
         }
 
         log.info("User authenticated, generating token for: {}", user.getUsername());
-        return jwtUtil.generateToken(user.getUsername());
+        return AuthResponseDTO.builder().token(jwtUtil.generateToken(user.getUsername())).build();
     }
 
 

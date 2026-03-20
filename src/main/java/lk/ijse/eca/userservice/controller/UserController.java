@@ -1,6 +1,6 @@
 package lk.ijse.eca.userservice.controller;
 
-import jakarta.validation.groups.Default;
+import lk.ijse.eca.userservice.dto.AuthResponseDTO;
 import lk.ijse.eca.userservice.dto.UserRequestDTO;
 import lk.ijse.eca.userservice.dto.UserResponseDTO;
 import lk.ijse.eca.userservice.service.UserService;
@@ -31,5 +31,12 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponseDTO> login(
+            @Validated @RequestBody UserRequestDTO dto){
+        log.info("POST /api/v1/users/login - Username: {}", dto.getUsername());
+        AuthResponseDTO response = userService.login(dto);
+        return ResponseEntity.ok(response);
+    }
 
 }
